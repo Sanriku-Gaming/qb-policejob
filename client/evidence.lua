@@ -80,6 +80,19 @@ local function DnaHash(s)
     return h
 end
 
+exports("IsWearingGloves", IsWearingGloves)
+function IsWearingGloves()
+    local pPed = PlayerPedId()
+    local armIndex = GetPedDrawableVariation(pPed, 3)
+    local model = GetEntityModel(pPed)
+
+    if Config.Gloves[model] and Config.Gloves[model][armIndex] then
+        return true
+    else
+        return false
+    end
+end
+
 -- Events
 RegisterNetEvent('evidence:client:SetStatus', function(statusId, time)
     if time > 0 and StatusList[statusId] then
@@ -190,7 +203,7 @@ RegisterNetEvent('evidence:client:ClearCasingsInArea', function()
             end
             TriggerServerEvent('evidence:server:ClearCasings', casingList)
             QBCore.Functions.Notify(Lang:t("success.bullet_casing_removed"), "success")
-            
+
         end
     end, function() -- Cancel
         QBCore.Functions.Notify(Lang:t("error.bullet_casing_not_removed"), "error")
@@ -381,7 +394,7 @@ CreateThread(function()
             else
                 Wait(5000)
             end
-            if next(Blooddrops) then                    
+            if next(Blooddrops) then
                 if PlayerJob.type == 'leo' and PlayerJob.onduty then
                     local pos = GetEntityCoords(PlayerPedId(), true)
                     for k, v in pairs(Blooddrops) do

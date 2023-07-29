@@ -20,7 +20,7 @@ Config.BreakOutCuffing = true               -- Enable cuff breaking
 Config.BreakOutAttempts = 3                 -- Max number of attempts to break cuffs
 Config.BreakOutTimeToReset = 30             -- Time in minutes to reset 1 attempt
 
-Config.AllowWashGunpowder = true            -- Wash gunpowder off hands
+Config.AllowWashGunpowder = true
 
 -- itemname = name of the item
 -- propname = the prop used for cuffing
@@ -619,5 +619,14 @@ Config.Food = {
             type = "item",
             slot = 2,
         },
+    }
+}
+
+Config.Gloves = {
+    ['mp_m_freemode_01'] = {        -- Male arm numbers for gloves
+        1, 2, 5
+    },
+    ['mp_f_freemode_01'] = {        -- Female arm numbers for gloves
+        1, 2, 5
     }
 }
