@@ -86,7 +86,7 @@ function IsWearingGloves()
     local armIndex = GetPedDrawableVariation(pPed, 3)
     local model = GetEntityModel(pPed)
 
-    if Config.Gloves[model] and Config.Gloves[model][armIndex] then
+    if Config.NoGloves[model] and not Config.NoGloves[model][armIndex] then
         return true
     else
         return false
