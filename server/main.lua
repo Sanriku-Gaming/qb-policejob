@@ -1278,9 +1278,11 @@ CreateThread(function()
     end
 end)
 
-CreateThread(function()
-    while true do
-        Wait(5000)
-        UpdateBlips()
-    end
-end)
+if Config.UseDutyBlips then
+    CreateThread(function()
+        while true do
+            Wait(5000)
+            UpdateBlips()
+        end
+    end)
+end

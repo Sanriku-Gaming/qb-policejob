@@ -80,18 +80,15 @@ local function DnaHash(s)
     return h
 end
 
-exports("IsWearingGloves", IsWearingGloves)
 function IsWearingGloves()
     local pPed = PlayerPedId()
-    local armIndex = GetPedDrawableVariation(pPed, 3)
     local model = GetEntityModel(pPed)
-
-    if Config.NoGloves[model] and not Config.NoGloves[model][armIndex] then
-        return true
-    else
-        return false
-    end
+    local armIndex = GetPedDrawableVariation(pPed, 3)
+    if armIndex == 0 then return false end
+    return Config.NoGloves[model] and not Config.NoGloves[model][armIndex] and true or false
 end
+
+exports("IsWearingGloves", IsWearingGloves)
 
 -- Events
 RegisterNetEvent('evidence:client:SetStatus', function(statusId, time)

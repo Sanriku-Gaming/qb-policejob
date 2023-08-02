@@ -22,6 +22,7 @@ Config.BreakOutTimeToReset = 30             -- Time in minutes to reset 1 attemp
 
 Config.AllowWashGunpowder = true
 
+Config.UseDutyBlips = false
 -- itemname = name of the item
 -- propname = the prop used for cuffing
 -- needkey = does the cuff needs a key to uncuff ? It will give a key when true
@@ -623,10 +624,12 @@ Config.Food = {
 }
 
 Config.NoGloves = {
-    ['mp_m_freemode_01'] = {        -- Male arm numbers without gloves
+    --[GetHashKey('mp_m_freemode_01')] = {        -- Male arm numbers without gloves
+    [`mp_m_freemode_01`] = {        -- Male arm numbers without gloves
         0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 101, 102, 116, 117, 118, 122, 129, 136, 188, 192, 200, 201, 202, 206, 214, 215
     },
-    ['mp_f_freemode_01'] = {        -- Female arm numbers without gloves
+    --[GetHashKey('mp_f_freemode_01')] = {        -- Female arm numbers without gloves
+    [`mp_f_freemode_01`] = {        -- Female arm numbers without gloves
         0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 23, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 116, 117, 133, 134, 135, 139, 146, 153, 161, 165, 169, 233, 237
     }
 }
