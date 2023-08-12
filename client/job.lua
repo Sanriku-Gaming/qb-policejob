@@ -1136,7 +1136,7 @@ if Config.UseTarget then
             })
         end
 
-        if Config.UseGarage then
+        if Config.Enable['garage'] then
             for k, v in pairs(Config.Locations["vehicle"]) do
                 local hash = GetHashKey(Config.GaragePedModel)
                 RequestModel(hash)

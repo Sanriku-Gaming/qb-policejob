@@ -1278,7 +1278,7 @@ CreateThread(function()
     end
 end)
 
-if Config.UseDutyBlips then
+if Config.Enable['dutyblips'] then
     CreateThread(function()
         while true do
             Wait(5000)

@@ -221,8 +221,9 @@ RegisterNetEvent('evidence:client:writeEvidenceNote', function(item)
 end)
 
 AddEventHandler("CEventGunShot", function(witnesses, ped)
+    if PlayerPedId() ~= ped then return end
     local weapon = GetSelectedPedWeapon(ped)
-    if PlayerPedId() == ped and not WhitelistedWeapon(weapon) then
+    if not WhitelistedWeapon(weapon) then
         shotAmount = shotAmount + 1
         if shotAmount > 5 and (CurrentStatusList == nil or CurrentStatusList['gunpowder'] == nil) then
             if math.random(1, 10) <= 7 then
@@ -264,10 +265,10 @@ CreateThread(function()
             if #(pos -vector3(Casings[CurrentCasing].coords.x, Casings[CurrentCasing].coords.y, Casings[CurrentCasing].coords.z)) < 1.5 then
                 if PlayerJob.type == 'leo' and PlayerJob.onduty then
                     DrawText3D(Casings[CurrentCasing].coords.x, Casings[CurrentCasing].coords.y, Casings[CurrentCasing].coords.z, Lang:t('info.bullet_casing', {value = Casings[CurrentCasing].type}))
-                else
+                elseif Config.Enable['destroycasings'] then
                     DrawText3D(Casings[CurrentCasing].coords.x, Casings[CurrentCasing].coords.y, Casings[CurrentCasing].coords.z, Lang:t('info.destroy_casing', {value = Casings[CurrentCasing].type}))
                 end
-                if IsControlJustReleased(0, 47) then
+                if PlayerJob.type == 'leo' and PlayerJob.onduty and IsControlJustReleased(0, 47) then
                     local ped = PlayerPedId()
                     --ClearPedTasksImmediately(ped)
                     if GetSelectedPedWeapon(ped) ~= `WEAPON_UNARMED` then SetCurrentPedWeapon(ped, `WEAPON_UNARMED`, true) end
@@ -291,7 +292,7 @@ CreateThread(function()
                     }
                     TriggerServerEvent('evidence:server:AddCasingToInventory', CurrentCasing, info)
                     ClearPedTasks(ped)
-                elseif IsControlJustReleased(0, 74) then
+                elseif Config.Enable['destroycasings'] and IsControlJustReleased(0, 74) then
                     local ped = PlayerPedId()
                     if QBCore.Functions.HasItem('rubber_gloves') then
                         if GetSelectedPedWeapon(ped) ~= `WEAPON_UNARMED` then SetCurrentPedWeapon(ped, `WEAPON_UNARMED`, true) end
@@ -378,14 +379,27 @@ CreateThread(function()
         Wait(10)
         if LocalPlayer.state.isLoggedIn then
             if next(Casings) then
-                local pos = GetEntityCoords(PlayerPedId(), true)
-                for k, v in pairs(Casings) do
-                    local dist = #(pos - vector3(v.coords.x, v.coords.y, v.coords.z))
-                    if dist < 3.0 then
-                        DrawMarker(3, v.coords.x, v.coords.y, v.coords.z - 0.3, 0, 0, 0, 0, 180.0, 0, 0.15, 0.15, 0.15, 255, 0, 0, 60, 1, 0, 0, 1)
+                if Config.Enable['destroycasings'] then
+                    local pos = GetEntityCoords(PlayerPedId(), true)
+                    for k, v in pairs(Casings) do
+                        local dist = #(pos - vector3(v.coords.x, v.coords.y, v.coords.z))
+                        if dist < 3.0 and Config.Markers['evidence'].casings then
+                            DrawMarker(3, v.coords.x, v.coords.y, v.coords.z - 0.3, 0, 0, 0, 0, 180.0, 0, 0.15, 0.15, 0.15, 255, 0, 0, 60, 1, 0, 0, 1)
+                        end
+                        if dist < 1.5 and IsPlayerFreeAiming(PlayerId()) and GetSelectedPedWeapon(PlayerPedId()) == `WEAPON_FLASHLIGHT` then
+                            CurrentCasing = k
+                        end
                     end
-                    if dist < 1.5 and IsPlayerFreeAiming(PlayerId()) and GetSelectedPedWeapon(PlayerPedId()) == `WEAPON_FLASHLIGHT` then
-                        CurrentCasing = k
+                elseif PlayerJob.type == 'leo' and PlayerJob.onduty then
+                    local pos = GetEntityCoords(PlayerPedId(), true)
+                    for k, v in pairs(Casings) do
+                        local dist = #(pos - vector3(v.coords.x, v.coords.y, v.coords.z))
+                        if dist < 3.0 and Config.Markers['evidence'].casings then
+                            DrawMarker(3, v.coords.x, v.coords.y, v.coords.z - 0.3, 0, 0, 0, 0, 180.0, 0, 0.15, 0.15, 0.15, 255, 0, 0, 60, 1, 0, 0, 1)
+                        end
+                        if dist < 1.5 and IsPlayerFreeAiming(PlayerId()) and GetSelectedPedWeapon(PlayerPedId()) == `WEAPON_FLASHLIGHT` then
+                            CurrentCasing = k
+                        end
                     end
                 end
             else
@@ -396,7 +410,7 @@ CreateThread(function()
                     local pos = GetEntityCoords(PlayerPedId(), true)
                     for k, v in pairs(Blooddrops) do
                         local dist = #(pos - vector3(v.coords.x, v.coords.y, v.coords.z))
-                        if dist < 3.0 then
+                        if dist < 3.0 and Config.Markers['evidence'].blooddrops then
                             DrawMarker(3, v.coords.x, v.coords.y, v.coords.z - 0.3, 0, 0, 0, 0, 180.0, 0, 0.15, 0.15, 0.15, 255, 0, 0, 60, 1, 0, 0, 1)
                         end
                         if dist < 1.5 and IsPlayerFreeAiming(PlayerId()) and GetSelectedPedWeapon(PlayerPedId()) == `WEAPON_FLASHLIGHT` then
@@ -412,7 +426,7 @@ CreateThread(function()
                     local pos = GetEntityCoords(PlayerPedId(), true)
                     for k, v in pairs(Fingerprints) do
                         local dist = #(pos - vector3(v.coords.x, v.coords.y, v.coords.z))
-                        if dist < 3.0 then
+                        if dist < 3.0 and Config.Markers['evidence'].fingerprints then
                             DrawMarker(3, v.coords.x, v.coords.y, v.coords.z - 0.3, 0, 0, 0, 0, 180.0, 0, 0.15, 0.15, 0.15, 255, 0, 0, 60, 1, 0, 0, 1)
                         end
                         if dist < 1.5 and IsPlayerFreeAiming(PlayerId()) and GetSelectedPedWeapon(PlayerPedId()) == `WEAPON_FLASHLIGHT` then
@@ -428,7 +442,7 @@ CreateThread(function()
 end)
 
 -- Wash Gunpowder
-if Config.AllowWashGunpowder then
+if Config.Enable['washgunpowder'] then
     CreateThread(function()
         local textDrawn = false
         while true do

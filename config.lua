@@ -1,4 +1,20 @@
 Config = {}
+Config.UseTarget = GetConvar('UseTarget', 'false') == 'true'
+
+Config.Enable = {
+    ['dutyblips'] = false,          -- Set to true to use script duty blips, false if you have a separate script for duty blips (ex: cd_dispatch)
+    ['garage'] = false,             -- Set to true to use script vehicles, false if you have a separate job garage script (ex: cd_garage)
+    ['washgunpowder'] = true,       -- Set to true to allow players to wash gunpower off when in water
+    ['destroycasings'] = true,      -- Set to true to allow all players to destroy bullet casings, false to only allow leo to see/bag them
+}
+
+Config.Markers = {
+    ['evidence'] = {                -- Set to true to draw markers for the following evidence items
+        casings = true,
+        blooddrops = true,
+        fingerprints = true,
+    },
+}
 
 Config.Objects = {
     ["cone"] = {model = `prop_roadcone02a`, freeze = false},
@@ -20,9 +36,6 @@ Config.BreakOutCuffing = true               -- Enable cuff breaking
 Config.BreakOutAttempts = 3                 -- Max number of attempts to break cuffs
 Config.BreakOutTimeToReset = 30             -- Time in minutes to reset 1 attempt
 
-Config.AllowWashGunpowder = true
-
-Config.UseDutyBlips = false
 -- itemname = name of the item
 -- propname = the prop used for cuffing
 -- needkey = does the cuff needs a key to uncuff ? It will give a key when true
@@ -34,8 +47,8 @@ Config.CuffItems = {
 }
 
 Config.LicenseRank = 2
+
 Config.BlockWallThermals = true -- true/false; lowers thermal cam intensity to stop penetration through walls or tunnels
-Config.UseTarget = GetConvar('UseTarget', 'false') == 'true'
 
 Config.Locations = {
     ["duty"] = {
@@ -137,7 +150,6 @@ Config.SecurityCameras = {
     },
 }
 
-Config.UseGarage = false -- Set to True to use script vehicles, false if you have a separate job garage script (ex: cd_garage)
 Config.GaragePedModel = "s_m_y_hwaycop_01"
 
 Config.EnableMods = true -- Enable the mods below to be applied
